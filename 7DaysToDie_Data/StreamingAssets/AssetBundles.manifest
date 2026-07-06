@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 1477290558
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: steamvr_shaders
+      Dependencies: {}
+    Info_1:
+      Name: xrmanager
+      Dependencies: {}
+    Info_2:
+      Name: thenakeddevassets
+      Dependencies: {}
+    Info_3:
+      Name: steamvr_player_prefabs
+      Dependencies: {}
+    Info_4:
+      Name: vrkeys
+      Dependencies: {}
+    Info_5:
+      Name: amplify_resources
+      Dependencies: {}
+    Info_6:
+      Name: vhvr_custom
+      Dependencies: {}
+    Info_7:
+      Name: 7dvrcustomprefabs
+      Dependencies: {}

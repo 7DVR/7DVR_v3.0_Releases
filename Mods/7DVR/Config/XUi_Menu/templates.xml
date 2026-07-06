@@ -1,0 +1,67 @@
+<VR_templates>
+	<append xpath="/templates">
+
+		<!-- Option row for the VR Options window.
+		     Mimics the 3.0 options_combo visual layout (border, gradient, label + combobox)
+		     but uses XUiC_VROptionHover (a tiny per-row hover-state controller) on the outer
+		     rect instead of requiring the full XUiC_OptionsDialogBase apply/defaults/tab/
+		     GamePrefs machinery, which XUiC_7DVROptions doesn't use. That controller exposes
+		     the option_hovered binding (mirroring vanilla's XUiC_OptionEntryAbs.OptionHovered)
+		     that drives the border/background hover-highlight below, and on hover it tells
+		     XUiC_7DVROptions about itself so the right-side description panel (windows.xml's
+		     "vrOptionDescription") can show this row's caption/description - the same
+		     hovered_custom_attributes pattern vanilla's options_descriptions uses, NOT the
+		     generic floating XUiView tooltip (that pop-up box doesn't match 3.0's new style).
+		     caption/description below become plain CustomAttributes on this row's controller
+		     (resolved once via ${...} template substitution, same as vanilla's options_combo).
+		     The outer rect carries the option name so C# can find it via GetChildById,
+		     and the combobox inside is found via GetChildByType<XUiC_ComboBox*>().
+		     Usage example:
+		         <vr_options_combo name_localization_prefix="xuiOptionsControls" name="TurnMode"
+		             type="ComboBoxList`1[System.String]" values="Snap, Smooth, Physical" /> -->
+		<vr_options_combo name_localization_prefix="" localization_prefix="" pos="0,0" visible="true" enabled="true"
+				value_min="@DEF" value_max="@DEF" index_min="-1" index_max="-1" value_wrap="@DEF"
+				value_increment="@DEF" values="@DEF" reverse_list="@DEF" format_string="" width="1150">
+			<rect name="${name}" pos="${pos}" width="${width}" height="45" visible="${visible}" on_hover="true"
+					controller="_7DaysVR.VRCore.UI.XUiC_VROptionHover, 7DaysVR, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null"
+					caption="${name_localization_prefix}${name}" description="${name_localization_prefix}${name}Tooltip">
+				<sprite name="border"     depth="1" sprite="menu_empty"                   type="sliced" fillcenter="false" color="{% option_hovered ? '228, 18, 21, 255' : '64,64,64,255' }" />
+				<sprite name="background" depth="0" sprite="ui_game_header_fill_gradient" type="sliced"                   color="{% option_hovered ? '228, 18, 21, 180' : '0,0,0,0' }" />
+				<label  depth="2" pos="10,-27" width="370" height="30"
+						text_key="xuiOptionsControls${name}"
+						font_size="28" color="[white]" justify="left" pivot="left" visible="${visible}" />
+				<combobox name="${name}_combo" type="${type}" localization_prefix="${localization_prefix}"
+						value_min="${value_min}" value_max="${value_max}"
+						index_min="${index_min}" index_max="${index_max}"
+						value_wrap="${value_wrap}" value_increment="${value_increment}"
+						values="${values}" reverse_list="${reverse_list}" format_string="${format_string}"
+						index_markers="true" index_marker_spacing="10"
+						pos="400,-9" width="${width - 400}" height="32" enabled="${enabled}" />
+			</rect>
+		</vr_options_combo>
+
+		<!-- Button row for the VR Options window — fits the same 45-unit grid cell height
+		     and places a simplebutton flush-left, matching the option row layout.
+		     C# finds the simplebutton via GetChildById(name) as XUiC_SimpleButton.
+		     The wrapping row rect is named "${name}_row", NOT "${name}": the XML template engine
+		     names a template invocation's root element after the invocation itself (via
+		     _nodeNameOverride in XUiFromXml.createFromTemplate) whenever that root element has no
+		     explicit name of its own. Without the "_row" suffix here, this rect AND the
+		     <labeledbutton> below it both end up named "${name}", nested inside each other -
+		     GetChildById then returns this outer, controller-less rect instead of the real
+		     Button-controlled one, so OnPress subscriptions silently attach to the wrong node.
+		     Hover appearance (background/border/font color) already comes for free from
+		     labeledbutton's own btn_hovered binding - no extra controller needed here, unlike
+		     vr_options_combo above. tooltip_key is forwarded straight to labeledbutton/the
+		     generic XUiView tooltip mechanism; pass one in once a localization key exists.
+		     Usage example:
+		         <vr_options_button name="btnReloadControlsCSV" caption_key="btnReloadControlsCSV" /> -->
+		<vr_options_button name="" caption_key="" tooltip_key="" width="320" height="32" enabled="true" visible="true">
+			<rect name="${name}_row" width="1150" height="45" visible="${visible}">
+				<labeledbutton name="${name}" pos="0,-7" width="${width}" height="${height}"
+						font_size="28" caption_key="${caption_key}" tooltip_key="${tooltip_key}" enabled="${enabled}" upper_case="false" />
+			</rect>
+		</vr_options_button>
+
+	</append>
+</VR_templates>

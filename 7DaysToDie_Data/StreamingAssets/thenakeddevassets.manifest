@@ -1,0 +1,27 @@
+ManifestFileVersion: 0
+CRC: 3561589166
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5f20c4370c337f2d23aacb8e6e7ee472
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: febb50994d26f4cbc302a87722ce8b79
+HashAppended: 0
+ClassTypes:
+- Class: 72
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_prepare_inputs_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_shading_change_pyramid_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_accumulate_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_rcas_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_autogen_reactive_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_tcr_autogen_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_prepare_reactivity_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_luma_instability_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_debug_view_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_luma_pyramid_pass.compute
+- Assets/The Naked Dev/FSR/Runtime/Plugins/Shaders/FSR3/ffx_fsr3upscaler_shading_change_pass.compute
+Dependencies: []

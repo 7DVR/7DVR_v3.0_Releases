@@ -1,0 +1,470 @@
+<VRwindows>
+
+	<!-- ─────────────────────────────────────────────────────────────────────────
+	     INSERT THE "VR" TAB BUTTON INTO THE OPTIONS PAGE HEADER
+	     In 3.0 the options navigation bar lives in <window name="optionsPaging">.
+	     XUiC_WindowSelector opens the window_group whose name matches the button,
+	     so <pagingheader_button name="VR"> opens window_group name="VR" (xui.xml).
+	     ───────────────────────────────────────────────────────────────────────── -->
+	<insertBefore xpath="/windows/window[@name='optionsPaging']/rect/rect/table[@name='tabButtons']/gamepad_icon[@name='controllericonRight']">
+		<pagingheader_button name="VR" text_key="xuiVROptions" />
+	</insertBefore>
+
+
+	<!-- ─────────────────────────────────────────────────────────────────────────
+	     APPEND ALL VR WINDOWS TO THE MAIN WINDOWS LIST
+	     ───────────────────────────────────────────────────────────────────────── -->
+	<append xpath="/windows">
+
+				<!-- ── VR LOGO ──────────────────────────────────────────────────────────
+				     Small overlay logo shown while the main menu is open.
+				     Registered into window_group[mainMenu] via xui.xml.
+				     Positioned relative to mainMenu window (anchor Top) to be next to gameLogo.
+				     -->
+				<window name="VRLogo" depth="-1" pos="-600,-200" width="250" height="350" anchor="Top">
+					<texture name="VRLogo" texture="@modfolder:/Config/Images/7DVRLogo.png" />
+				</window>
+
+
+		<!-- ── VR OPTIONS ───────────────────────────────────────────────────────
+		     Dimensions and outer structure match the 3.0 optionsGeneral window.
+		     Controller lives on window_group "VR" in xui.xml, not here.
+		     All combobox IDs must match GetChildById() calls in XUiC_7DVROptions.
+		     ────────────────────────────────────────────────────────────────────-->
+		<window name="VROptions" anchor="Top" pos="0,-88" width="1800" height="820" depth="10" cursor_area="true">
+
+			<!-- Tab selector — drives the 9 VR option tabs -->
+			<rect name="tabs" controller="TabSelector" pos="0,0" height="700"
+					select_tab_contents_on_open="true" use_page_buttons="true">
+
+				<!-- Tab button bar (up to 10 slots; we use 9) -->
+				<options_tabbuttonsbar />
+
+				<!-- Content area: 1200 px wide, offset to left edge of 1800 px window -->
+				<rect name="content" pos="-900,-70" height="661">
+					<rect name="tabsContents" depth="2">
+
+
+						<!-- ═══════════════════════════════════════════════════════
+						     TAB 1 — GENERAL
+						     Core VR mode toggles that affect the whole experience.
+						     ═══════════════════════════════════════════════════════ -->
+						<rect controller="TabSelectorTab" tab_key="xui7DVRGeneralSettings">
+							<rect name="scrollarea" width="1200" height="750"
+									on_scroll="true" gamepad_selectable="false" snap="false">
+								<options_scrollbar />
+								<scrollview clippingsoftness="0,10"
+										anchor_top="#parent,1,0" anchor_bottom="buttons,1,10">
+									<grid pos="8,-20" cols="1" cell_width="1150" cell_height="45"
+											repeat_content="false" arrangement="horizontal">
+
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="VRMode"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="SeatedModeEnabled"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="WorkoutModeEnabled"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BrokenItemAlert"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ImprovedHorns"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+
+									</grid>
+								</scrollview>
+							</rect>
+						</rect>
+						<!-- END General -->
+
+
+						<!-- ═══════════════════════════════════════════════════════
+						     TAB 2 — CAMERA
+						     Body visibility, vehicle comfort, vignette, stamina
+						     alert, and dynamic object quality.
+						     ═══════════════════════════════════════════════════════ -->
+						<rect controller="TabSelectorTab" tab_key="xui7DVRCameraSettings">
+							<rect name="scrollarea" width="1200" height="750"
+									on_scroll="true" gamepad_selectable="false" snap="false">
+								<options_scrollbar />
+								<scrollview clippingsoftness="0,10"
+										anchor_top="#parent,1,0" anchor_bottom="buttons,1,10">
+									<grid pos="8,-20" cols="1" cell_width="1150" cell_height="45"
+											repeat_content="false" arrangement="horizontal">
+
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BodyVisible"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="HeadVisible"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="RemoveVehicleSeatTilt"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="VehicleComfortCameraLock"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ComfortEnableVignette"
+												type="ComboBoxList`1[System.String]"
+												values="Enabled For Vehicles, Enabled For All Movement, Disabled" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ComfortVignetteApertureSize"
+												type="ComboBoxFloat"
+												value_min="0.0" value_max="1.0" value_increment="0.05" format_string="0%" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ComfortVignetteFeatheringEffect"
+												type="ComboBoxFloat"
+												value_min="0.0" value_max="1.0" value_increment="0.05" format_string="0%" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="LowStmAlert"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="LowStmThreshold"
+												type="ComboBoxFloat"
+												value_min="0.05" value_max="0.90" value_increment="0.05" format_string="0%" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="DynamicObjectQualityTargetFPS"
+												type="ComboBoxInt"
+												value_min="0" value_max="120" value_increment="1" />
+
+									</grid>
+								</scrollview>
+							</rect>
+						</rect>
+						<!-- END Camera -->
+
+
+						<!-- ═══════════════════════════════════════════════════════
+						     TAB 3 — CONTROL
+						     Turning, locomotion, hotkeys, handedness, and misc
+						     controller settings.
+						     ═══════════════════════════════════════════════════════ -->
+						<rect controller="TabSelectorTab" tab_key="xui7DVRControlSettings">
+							<rect name="scrollarea" width="1200" height="750"
+									on_scroll="true" gamepad_selectable="false" snap="false">
+								<options_scrollbar />
+								<scrollview clippingsoftness="0,10"
+										anchor_top="#parent,1,0" anchor_bottom="buttons,1,10">
+									<grid pos="8,-20" cols="1" cell_width="1150" cell_height="45"
+											repeat_content="false" arrangement="horizontal">
+
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="TurnMode"
+												type="ComboBoxList`1[System.String]"
+												values="Snap, Smooth, Physical" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="SnapTurnAngle"
+												type="ComboBoxFloat"
+												value_min="0.0" value_max="180.0" value_increment="5.0" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="SmoothTurnSpeed"
+												type="ComboBoxFloat"
+												value_min="0.0" value_max="720.0" value_increment="5.0" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="MoveDirection"
+												type="ComboBoxList`1[System.String]"
+												values="Headset, LeftHand, RightHand" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ToggleRun"
+												type="ComboBoxList`1[System.String]"
+												values="Off, Run Until Stop, Always Run" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="MenuActionHotkeysMode"
+												type="ComboBoxList`1[System.String]"
+												values="Disabled, Hotkey Only, Click then Hotkey" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="PhysicalSneak"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="PhysicalSneakThreshold"
+												type="ComboBoxFloat"
+												value_min="0.10" value_max="0.95" value_increment="0.05" format_string="0%" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="LeftHandedMode"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="LeftHandedControlMode"
+												type="ComboBoxList`1[System.String]"
+												values="Mirror All, Mirror Grips/Triggers Only, No Changes" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="VehicleTurnSpeed"
+												type="ComboBoxFloat"
+												value_min="0.1" value_max="1.0" value_increment="0.1" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="GyroSafetyLatch"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="PreventMenuMove"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="EnableKeyboardFKeys"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ControllerMode"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ClickDeadzoneRadius"
+												type="ComboBoxFloat"
+												value_min="0" value_max="50" value_increment="5" format_string="0" />
+										<vr_options_button name="btnReloadControlsCSV" caption_key="btnReloadControlsCSV" />
+
+									</grid>
+								</scrollview>
+							</rect>
+						</rect>
+						<!-- END Control -->
+
+
+						<!-- ═══════════════════════════════════════════════════════
+						     TAB 4 — HANDS
+						     Weapon pointer, laser/pointer color, and hand/item
+						     position adjustment buttons.
+						     ═══════════════════════════════════════════════════════ -->
+						<rect controller="TabSelectorTab" tab_key="xui7DVRUISettings">
+
+							<!-- Pointer colors: two full RGBA color pickers side by side, replacing
+							     the old 8 separate R/G/B/A combos. This is vanilla's sign-painting
+							     widget (XUi_Common/templates.xml's advanced_color_picker, controller
+							     XUiC_AdvancedColorPicker) - SV square + hue/alpha sliders + RGBA/hex
+							     fields + copy/paste, all in one. It's wrapped in our own uniquely
+							     named rect (WorldPointerColorPicker/MenuPointerColorPicker) because
+							     the picker's own template always names its root "colorParams", so two
+							     side by side would otherwise collide (see the GetChildById naming
+							     gotcha noted elsewhere in this file). Sits above the scrollarea, not
+							     inside the grid, since it's much taller than a 45px row and needs to
+							     be two-wide rather than stacked. -->
+							<rect name="pointerColors" pos="8,-20" width="1150" height="400">
+								<label pos="0,0" width="320" height="30" font_size="26" justify="left" pivot="left"
+										text_key="xuiOptionsControlsWorldPointerColor" color="[white]" />
+								<rect name="WorldPointerColorPicker" pos="0,-40">
+									<advanced_color_picker edit_alpha="true" cursor_radius="10" />
+								</rect>
+
+								<label pos="420,0" width="320" height="30" font_size="26" justify="left" pivot="left"
+										text_key="xuiOptionsControlsMenuPointerColor" color="[white]" />
+								<rect name="MenuPointerColorPicker" pos="420,-40">
+									<advanced_color_picker edit_alpha="true" cursor_radius="10" />
+								</rect>
+							</rect>
+							<!-- END pointerColors -->
+
+							<rect name="scrollarea" pos="0,-400" width="1200" height="350"
+									on_scroll="true" gamepad_selectable="false" snap="false">
+								<options_scrollbar />
+								<scrollview clippingsoftness="0,10"
+										anchor_top="#parent,1,0" anchor_bottom="buttons,1,10">
+									<grid pos="8,-20" cols="1" cell_width="1150" cell_height="45"
+											repeat_content="false" arrangement="horizontal">
+
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="WeaponPointer"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="CursorSize"
+												type="ComboBoxFloat"
+												value_min="0.0" value_max="2.0" value_increment="0.1" format_string="0%" />
+
+									</grid>
+
+									<!-- Offhand buttons in the left column, mainhand buttons in the right -
+									     arrangement="vertical" with rows="4" fills column-major (first 4
+									     items down column 1, next 4 down column 2), so the existing
+									     left-then-right button order doesn't need to change, just how the
+									     grid lays them out. -->
+									<grid pos="8,-130" cols="2" rows="4" cell_width="565" cell_height="45"
+											repeat_content="false" arrangement="vertical">
+
+										<vr_options_button name="btnAdjustLeftItem"  caption_key="btnAdjustLeftItem"  />
+										<vr_options_button name="btnAdjustLeftLaser" caption_key="btnAdjustLeftLaser" />
+										<vr_options_button name="btnAdjustLeftHand"  caption_key="btnAdjustLeftHand"  />
+										<vr_options_button name="btnResetLeftHand"   caption_key="btnResetLeftHand"   />
+										<vr_options_button name="btnAdjustRightItem"  caption_key="btnAdjustRightItem"  />
+										<vr_options_button name="btnAdjustRightLaser" caption_key="btnAdjustRightLaser" />
+										<vr_options_button name="btnAdjustRightHand"  caption_key="btnAdjustRightHand"  />
+										<vr_options_button name="btnResetRightHand"   caption_key="btnResetRightHand"   />
+
+									</grid>
+								</scrollview>
+							</rect>
+						</rect>
+						<!-- END Hands -->
+
+
+						<!-- ═══════════════════════════════════════════════════════
+						     TAB 5 — UI / SHARDS
+						     Super-shard system toggle, UI layout mode, and shard
+						     reset button.
+						     ═══════════════════════════════════════════════════════ -->
+						<rect controller="TabSelectorTab" tab_key="xuiShards">
+							<rect name="scrollarea" width="1200" height="750"
+									on_scroll="true" gamepad_selectable="false" snap="false">
+								<options_scrollbar />
+								<scrollview clippingsoftness="0,10"
+										anchor_top="#parent,1,0" anchor_bottom="buttons,1,10">
+									<grid pos="8,-20" cols="1" cell_width="1150" cell_height="45"
+											repeat_content="false" arrangement="horizontal">
+
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="UseSuperShards"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="UIMode"
+												type="ComboBoxList`1[System.String]"
+												values="Float, Wrist, Both, Mixed, Mixed (District Zero), Mixed (Darkness Falls), Mixed (War3zuk), Mixed (Asia Mod), Mixed (Afterlife), None" />
+										<vr_options_button name="btnResetShards" caption_key="btnResetShards" />
+
+									</grid>
+								</scrollview>
+							</rect>
+						</rect>
+						<!-- END UI / Shards -->
+
+
+						<!-- ═══════════════════════════════════════════════════════
+						     TAB 6 — ADVANCED
+						     Dynamic object quality tuning, biome particle tweaks,
+						     and experimental toggles.
+						     ═══════════════════════════════════════════════════════ -->
+						<rect controller="TabSelectorTab" tab_key="xui7DVRAdvancedSettings">
+							<rect name="scrollarea" width="1200" height="750"
+									on_scroll="true" gamepad_selectable="false" snap="false">
+								<options_scrollbar />
+								<scrollview clippingsoftness="0,10"
+										anchor_top="#parent,1,0" anchor_bottom="buttons,1,10">
+									<grid pos="8,-20" cols="1" cell_width="1150" cell_height="45"
+											repeat_content="false" arrangement="horizontal">
+
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="DisableDynamicObjectQuality"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="DynamicObjectQualityMin"
+												type="ComboBoxFloat"
+												value_min="0.5" value_max="15.0" value_increment="0.1" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="DynamicObjectQualityPanicMin"
+												type="ComboBoxFloat"
+												value_min="0.5" value_max="1.5" value_increment="0.1" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="DynamicObjectQualityMax"
+												type="ComboBoxFloat"
+												value_min="0.5" value_max="15.0" value_increment="0.1" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ObjectQualityOverride"
+												type="ComboBoxFloat"
+												value_min="0.5" value_max="15.0" value_increment="0.1" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BiomeParticlesShapeScaleZ"
+												type="ComboBoxFloat"
+												value_min="0.0" value_max="5.0" value_increment="0.01" format_string="0.00" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BiomeParticlesShapePositionZ"
+												type="ComboBoxFloat"
+												value_min="-5.0" value_max="5.0" value_increment="0.01" format_string="0.00" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BiomeParticlesLifetime"
+												type="ComboBoxFloat"
+												value_min="1.0" value_max="480.0" value_increment="1.0" format_string="0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BiomeParticlesEmissionRate"
+												type="ComboBoxFloat"
+												value_min="0.0" value_max="20.0" value_increment="0.1" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BiomeParticlesVerticalPosition"
+												type="ComboBoxFloat"
+												value_min="-5.0" value_max="5.0" value_increment="0.1" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BiomeParticlesHorizontalPosition"
+												type="ComboBoxFloat"
+												value_min="-5.0" value_max="5.0" value_increment="0.1" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="LockVRUnfriendlyOptions"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="CompanionCube"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+
+									</grid>
+								</scrollview>
+							</rect>
+						</rect>
+						<!-- END Advanced -->
+
+
+						<!-- ═══════════════════════════════════════════════════════
+						     TAB 7 — DEBUG
+						     Debug toggles, float knobs, and hidden easter eggs.
+						     ═══════════════════════════════════════════════════════ -->
+						<rect controller="TabSelectorTab" tab_key="xui7DVRDebugSettings">
+							<rect name="scrollarea" width="1200" height="750"
+									on_scroll="true" gamepad_selectable="false" snap="false">
+								<options_scrollbar />
+								<scrollview clippingsoftness="0,10"
+										anchor_top="#parent,1,0" anchor_bottom="buttons,1,10">
+									<grid pos="8,-20" cols="1" cell_width="1150" cell_height="45"
+											repeat_content="false" arrangement="horizontal">
+
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="VR_DEBUG_ON"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ShowVRLogOverlayOnDebug"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="ShowVRVelocityOverlayOnDebug"
+												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="DebugFloat1"
+												type="ComboBoxFloat"
+												value_min="-1.0" value_max="1.0" value_increment="0.01" format_string="0.00" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="DebugFloat2"
+												type="ComboBoxFloat"
+												value_min="0.5" value_max="10.0" value_increment="0.01" format_string="0.00" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="DebugFloat3"
+												type="ComboBoxFloat"
+												value_min="0.5" value_max="10.0" value_increment="0.01" format_string="0.00" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="DebugFloat4"
+												type="ComboBoxFloat"
+												value_min="0.0" value_max="20.0" value_increment="0.1" format_string="0.0" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BitcoinMiner"
+												type="ComboBoxList`1[System.String]"
+												values="Yes, On, Enabled" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="SurpriseFeature"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
+
+									</grid>
+								</scrollview>
+							</rect>
+						</rect>
+						<!-- END Debug -->
+
+
+						<!-- ═══════════════════════════════════════════════════════
+						     TAB 8 — CONTROLLER MAP
+						     Static image showing the default controller layout.
+						     ═══════════════════════════════════════════════════════ -->
+						<rect controller="TabSelectorTab" tab_key="xui7DVRControllerMap">
+							<texture name="ControllerMap" texture="@modfolder:/Config/Images/Headset1.jpg" />
+							<label style="header.name" name="lblDefaultNote"
+									pos="180,-6" width="1000" color="255,255,0,255"
+									text="Default Controls — does not update if you remap SteamVR bindings" />
+							<label style="header.name" name="lblRightStickNote"
+									pos="550,-500" width="1000" color="255,0,0,255"
+									text="Hold Right Stick for ammo and shape selection" />
+						</rect>
+						<!-- END Controller Map -->
+
+
+						<!-- ═══════════════════════════════════════════════════════
+						     TAB 9 — SUPPORTERS
+						     Thank-you image for Patreon supporters.
+						     ═══════════════════════════════════════════════════════ -->
+						<rect controller="TabSelectorTab" tab_key="xui7DVRSupporters">
+							<texture name="SupportersImage" texture="@modfolder:/Config/Images/Thanks.png" />
+						</rect>
+						<!-- END Supporters -->
+
+
+					</rect>
+					<!-- END tabsContents -->
+				</rect>
+				<!-- END content -->
+
+				<!-- Description panel: shows the caption/description of whichever row is
+				     currently hovered, matching 3.0's new options_descriptions style (a
+				     panel to the right of the list) instead of a floating tooltip. Sits
+				     as a sibling of "content" (not inside tabsContents) so it stays put
+				     across tab switches. hovered_custom_attributes comes from
+				     XUiC_7DVROptions.HoveredOption, set by XUiC_VROptionHover on hover.
+				     Positioned past x=316 (tabs-local) because "scrollarea" is 1200 wide and
+				     options_scrollbar sits at parentinnerwidth (~1200) + its own 16px width,
+				     i.e. local x ~300-316 within content (content itself starts at -900) -
+				     when a tab's content overflows and the scrollbar becomes visible it was
+				     overlapping a panel placed any closer than that. -->
+				<sprite name="vrOptionsDescriptionSeparator" pos="340,-70" width="2" height="661" depth="0"
+						sprite="menu_empty" type="sliced" color="[darkGrey]" fillcenter="false" />
+				<rect name="vrOptionDescription" pos="350,-70" width="500" height="661">
+					<label name="caption" pos="0,-20" height="40" font_size="30" pivot="left"
+							text="{% localization(dictvalue(hovered_custom_attributes, 'caption')) }"
+							color="228, 18, 21, 255" />
+					<label name="description" pos="0,-60" width="500" height="580" font_size="26"
+							text="{% localization(dictvalue(hovered_custom_attributes, 'description')) }" />
+				</rect>
+				<!-- END vrOptionDescription -->
+			</rect>
+			<!-- END tabs -->
+
+
+			<!-- Back and Apply buttons.
+			     simplebutton is used (not labeledglyphbutton) so that XUiC_7DVROptions can
+			     retrieve them as XUiC_SimpleButton via GetChildById / GetChildByType.
+			     btnApply starts disabled; C# enables it when any option changes.         -->
+			<rect name="buttons" pos="-900,-820" anchor_bottom="#cam,0,30" anchor_top="#cam,0,80">
+				<table pos="-20,0" height="48" cols="3" padding="20,0"
+						reposition_twice="true" pivot="topleft" cell_alignment="center">
+					<labeledglyphbutton name="btnBack"  depth="3" width="200" font_size="32"
+							caption_key="xuiBack"  upper_case="true" action="GUI Cancel" />
+					<rect name="spacer" width="200" />
+					<labeledglyphbutton name="btnApply" depth="3" width="200" font_size="32"
+							caption_key="xuiApply" upper_case="true" action="GUI Apply" />
+				</table>
+			</rect>
+
+		</window>
+		<!-- END VROptions -->
+
+	</append>
+
+</VRwindows>

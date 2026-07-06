@@ -1,0 +1,16 @@
+<VR_xui>
+	<!-- Register the VR window_group.
+	     XUiC_WindowSelector (on optionsPaging) opens a window_group whose name matches the clicked
+	     pagingheader_button. The "VR" button (inserted in windows.xml) opens this group,
+	     whose controller is our XUiC_7DVROptions. -->
+	<append xpath="/xui">
+		<window_group name="VR" controller="_7DaysVR.VRCore.UI.XUiC_7DVROptions, 7DaysVR, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+			<window name="VROptions" />
+		</window_group>
+	</append>
+
+	<!-- Show the VR logo overlay while the main menu is open. -->
+	<append xpath="/xui/window_group[@name='mainMenu']">
+		<window name="VRLogo" />
+	</append>
+</VR_xui>

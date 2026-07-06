@@ -1,0 +1,9 @@
+<Config>
+	<!-- Ensure that backgroundMain black sprite exists behind the map.  Needed for map Shader in VR.
+	     Remove the sprite and add it again to ensure there isn't a duplicate-->
+	<remove xpath="/windows/window[@name='mapArea']/panel[@name='content']/panel[@name='mapView']/sprite[@name='backgroundMain']" />
+	
+	<append xpath="/windows/window[@name='mapArea']/panel[@name='content']/panel[@name='mapView']">
+		<sprite depth="1" name="backgroundMain" sprite="menu_empty" color="[black]" type="sliced" fillcenter="true" globalopacity="false" />
+	</append>				
+</Config>
