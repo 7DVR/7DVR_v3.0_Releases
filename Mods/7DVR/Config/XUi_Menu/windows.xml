@@ -94,6 +94,9 @@
 												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
 										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="HeadVisible"
 												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="BodyAndItemOnTop"
+												type="ComboBoxList`1[System.String]"
+												values="Always, Except In Vehicles, Never" />
 										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="RemoveVehicleSeatTilt"
 												type="ComboBoxBool" localization_prefix="xuiComboYesNo" />
 										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="VehicleComfortCameraLock"
@@ -155,6 +158,8 @@
 										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="MenuActionHotkeysMode"
 												type="ComboBoxList`1[System.String]"
 												values="Disabled, Hotkey Only, Click then Hotkey" />
+										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="GripTriggerScroll"
+												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
 										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="PhysicalSneak"
 												type="ComboBoxBool" localization_prefix="xuiComboOnOff" />
 										<vr_options_combo name_localization_prefix="xuiOptionsControls" name="PhysicalSneakThreshold"

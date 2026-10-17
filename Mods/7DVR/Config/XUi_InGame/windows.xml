@@ -1,0 +1,12 @@
+<Config>
+	<!-- Ensure that backgroundMain black sprite exists behind the map.  Needed for map Shader in VR.
+	     Originally added for Rebirth (3.2.0.165), which removes/changes this sprite; vanilla already has it.
+	     Remove the sprite and add it again to ensure there isn't a duplicate.
+	     7DVR's XML patches apply after all other mods (see ModManager_loadModsFromFolder_Patch), so this wins over overhaul changes.
+	     NOTE: In-game XUi patches must live in Config/XUi_InGame/ (7D 3.0+); the old Config/XUi/ folder is never loaded. -->
+	<remove xpath="/windows/window[@name='mapArea']/rect[@name='content']/rect[@name='mapView']/sprite[@name='backgroundMain']" />
+
+	<append xpath="/windows/window[@name='mapArea']/rect[@name='content']/rect[@name='mapView']">
+		<sprite depth="1" name="backgroundMain" sprite="menu_empty" color="[black]" type="sliced" fillcenter="true" globalopacitymod="0" />
+	</append>
+</Config>
